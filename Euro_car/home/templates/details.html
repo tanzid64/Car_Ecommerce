@@ -14,7 +14,9 @@
             <h5 class="card-subtitle  fs-4"><i class="fa-solid fa-dollar-sign fa-2xs" ></i>{{object.price}}</h5>
             <strong class="fs-4 ">{{object.brand.name}}</strong>
             <p class="card-text  fs-5">{{object.details}}</p>
-            <a href="{% url "details" object.id %}" class="btn btn-primary btn-lg">Buy Now</a>
+            {% if request.user.is_authenticated %}
+            <a href="{% url "buy_now" object.id %}" class="btn btn-primary btn-lg">Buy Now</a>
+            {% endif %}
         </div>
       </div>
     </div>

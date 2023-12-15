@@ -1,10 +1,14 @@
 from typing import Any
 from django.db.models.base import Model as Model
 from django.db.models.query import QuerySet
-from django.shortcuts import render
-from django.views.generic import ListView, TemplateView, DetailView
+from django.shortcuts import render, redirect
+from django.views.generic import ListView, DetailView, UpdateView
 from brand.models import Brand
 from car.models import Car
+from user.models import History
+from django.shortcuts import get_object_or_404
+from django.views import View
+from django.urls import reverse_lazy
 # Create your views here.
 
 
@@ -32,3 +36,15 @@ class DetailsView(DetailView):
     def get_object(self):
         pk = self.kwargs.get(self.pk_url_kwarg)
         return Car.objects.get(pk = pk)
+    
+# Buy Now
+def buy_now(request, id):
+    car = Car.objects.get(pk=id)
+    if car.quantity > 0:
+            history = History(name=car.name, brand=car.brand.name, quantity=1, user=request.user)
+            history.save()
+            car.quantity -= 1
+            car.save()
+    return redirect('profile')
+
+

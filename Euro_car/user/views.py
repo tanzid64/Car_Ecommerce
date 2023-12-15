@@ -6,6 +6,7 @@ from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 from django.contrib import messages
+from . models import History
 # Create your views here.
 # Sign Up
 class UserSignUpView(CreateView):
@@ -30,11 +31,17 @@ class ProfileView(DetailView):
     model = User
     def get_object(self):
         return self.request.user
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     context["data"] = Album.objects.all()
-    #     return context
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["history"] = History.objects.filter(user = self.request.user)
+        return context
     
+    # context_object_name = 'history'
+    # def get_queryset(self):
+    #     user = self.request.user
+    #     return History.objects.filter(user=user)
+
+
 # Edit Profile
 @method_decorator(login_required, name='dispatch')
 class EditProfileView(UpdateView):

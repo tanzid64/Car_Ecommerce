@@ -18,4 +18,29 @@
     <a href="{% url "edit_profile" %}" class="btn btn-primary mx-2">Edit Pofile</a>
     <a href="{% url "edit_password" %}" class="btn btn-warning">Edit Password</a>
 </div>
+
+<div class="  border rounded-3 m-5 p-5">
+    <h1 class="my-5">Order History:</h1>
+    <table class="table">
+  <thead>
+    <tr>
+      <th scope="col">OrderId</th>
+      <th scope="col">Car Name</th>
+      <th scope="col">Brand Name</th>
+      <th scope="col">Date</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for h in history %}
+    <tr>
+      <th scope="row">EC-{{h.id}}</th>
+      <td>{{h.name}}</td>
+      <td>{{h.brand}}</td>
+      <td>{{h.date}}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+
 {% endblock content %}
