@@ -1,0 +1,24 @@
+{% extends "base.html" %} {% load static %} 
+{% block title %}Details{% endblock title %} 
+{% block content %}
+
+  
+  <div class="col-12 ">
+    <div class="card ">
+      <div class="card-body row p-5 bg-warning">
+        <div class="card-image col-7">
+          <img src="{{object.image.url}}" alt="" class="card-img img-fluid w-100">
+        </div>
+        <div class="col-5 my-auto ">
+            <h5 class="card-title  fs-1">{{object.name}}</h5> <br>
+            <h5 class="card-subtitle  fs-4"><i class="fa-solid fa-dollar-sign fa-2xs" ></i>{{object.price}}</h5>
+            <strong class="fs-4 ">{{object.brand.name}}</strong>
+            <p class="card-text  fs-5">{{object.details}}</p>
+            <a href="{% url "details" object.id %}" class="btn btn-primary btn-lg">Buy Now</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<div class="comment"></div>
+{% endblock content %}
