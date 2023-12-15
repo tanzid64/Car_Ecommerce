@@ -9,6 +9,7 @@ from user.models import History
 from django.shortcuts import get_object_or_404
 from django.views import View
 from django.urls import reverse_lazy
+from .forms import CommentForm
 # Create your views here.
 
 
@@ -33,9 +34,28 @@ class HomeView(ListView):
 class DetailsView(DetailView):
     template_name = 'details.html'
     model = Car
-    def get_object(self):
-        pk = self.kwargs.get(self.pk_url_kwarg)
-        return Car.objects.get(pk = pk)
+    # def get_object(self):
+    #     pk = self.kwargs.get(self.pk_url_kwarg)
+    #     return Car.objects.get(pk = pk)
+    def post(self, request, *args, **kwargs):
+        comment_form = CommentForm(data=request.POST)
+        car = self.get_object()
+
+        if comment_form.is_valid():
+            new_comment = comment_form.save(commit=False)
+            new_comment.car = car
+            new_comment.save()
+
+        return self.get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        car = self.object
+        comments = car.comments.all()
+        comment_form = CommentForm()
+        context['comments'] = comments
+        context['comment_form'] = comment_form
+        return context
     
 # Buy Now
 def buy_now(request, id):

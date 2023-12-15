@@ -1,4 +1,4 @@
-{% extends "base.html" %} {% load static %} 
+{% extends "base.html" %} {% load static %} {% load crispy_forms_tags %}
 {% block title %}Details{% endblock title %} 
 {% block content %}
 
@@ -12,15 +12,35 @@
         <div class="col-5 my-auto ">
             <h5 class="card-title  fs-1">{{object.name}}</h5> <br>
             <h5 class="card-subtitle  fs-4"><i class="fa-solid fa-dollar-sign fa-2xs" ></i>{{object.price}}</h5>
-            <strong class="fs-4 ">{{object.brand.name}}</strong>
+            <strong class="fs-4 ">{{object.brand.name}}</strong> <br>
+            <p class="fs-4 ">Quantity :{{object.quantity}}</p>
             <p class="card-text  fs-5">{{object.details}}</p>
             {% if request.user.is_authenticated %}
             <a href="{% url "buy_now" object.id %}" class="btn btn-primary btn-lg">Buy Now</a>
+            {% else %}
+            <a href="{% url "signup" %}" class="btn btn-primary btn-lg">SignUp to Buy</a>
             {% endif %}
         </div>
       </div>
     </div>
   </div>
-
-<div class="comment"></div>
+<div class="card mx-4 mt-5">
+  <h5 class="m-4">Total Comments : {{comments | length}}</h5>
+  {% for comment in comments %}
+  <div class="card-body border m-2">
+    <p><strong>{{comment.name}}</strong> <small>{{comment.created_on}}</small></p>
+    <p>{{comment.body}}</p>
+  </div>
+  {% endfor %}
+</div>
+<div class="card m-4">
+  <h5 class="mx-4 mt-4">Add Comment</h5>
+  <div class="card-body">
+    <form action="" method="post">
+      {% csrf_token %}
+      {{comment_form|crispy}}
+      <button class="btn btn-warning">Submit</button>
+    </form>
+  </div>
+</div>
 {% endblock content %}
